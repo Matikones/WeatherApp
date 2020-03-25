@@ -1,19 +1,18 @@
 package com.example.weatherapp
 
-import android.content.Context
-import android.content.Intent
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_main.*
+import org.intellij.lang.annotations.MagicConstant
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.text.SimpleDateFormat
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -59,7 +58,13 @@ class MainActivity : AppCompatActivity() {
                     tekst5.text = SimpleDateFormat("HH.mm").format( posts.getSys().sunrise.toLong() * 1000L )
                     tekst6.text = SimpleDateFormat("HH.mm").format( posts.getSys().sunset.toLong() * 1000L )
                     tekst7.text = posts.getWeather()[0].description
-                    //tekst8.text = posts.getWeather()[0].icon
+                    tekst8.text = posts.getWeather()[0].icon
+                    var iconUrl = "https://openweathermap.org/img/w/".plus(posts.getWeather()[0].icon.plus(".png"))
+                    Log.d("start", iconUrl)
+                    Glide.with(this@MainActivity)
+                        .load(iconUrl)
+                        .fitCenter()
+                        .into(icon)
                 }
 
                 override fun onFailure(
