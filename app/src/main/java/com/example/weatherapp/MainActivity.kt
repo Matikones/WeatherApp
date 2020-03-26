@@ -3,7 +3,10 @@ package com.example.weatherapp
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.Toast
 import com.bumptech.glide.Glide
+import com.google.android.material.elevation.ElevationOverlayProvider
 import kotlinx.android.synthetic.main.activity_main.*
 import org.intellij.lang.annotations.MagicConstant
 import retrofit2.Call
@@ -25,9 +28,14 @@ class MainActivity : AppCompatActivity() {
         APIConnect()
 
         button.setOnClickListener {
-            city = editText.text.toString()
             Log.d("start", city)
-            APIConnect()
+            if(city == editText.text.toString())
+            {
+                Toast.makeText(this, "City is already showing", Toast.LENGTH_LONG).show()
+            }else{
+                city = editText.text.toString()
+                APIConnect()
+            }
         }
     }
 
@@ -50,15 +58,14 @@ class MainActivity : AppCompatActivity() {
                     }
                     val posts = response.body()!!
 
-                    tekst.text = posts.getName()
-                    Log.d("start", posts.getName())
-                    tekst2.text = SimpleDateFormat("dd.MM.yyyy HH.mm").format(posts.getDtime().toLong() * 1000L )
-                    tekst3.text = (posts.getMain().temp.toDouble() - 273.15).toInt().toString().plus("°C")
-                    tekst4.text = posts.getMain().pressure
-                    tekst5.text = SimpleDateFormat("HH.mm").format( posts.getSys().sunrise.toLong() * 1000L )
-                    tekst6.text = SimpleDateFormat("HH.mm").format( posts.getSys().sunset.toLong() * 1000L )
-                    tekst7.text = posts.getWeather()[0].description
-                    tekst8.text = posts.getWeather()[0].icon
+                    city_name.text = posts.getName()
+                    data.text = SimpleDateFormat("dd.MM.yyyy HH.mm").format(posts.getDtime().toLong() * 1000L )
+                    description.text = posts.getWeather()[0].description
+                    temp.text = (posts.getMain().temp.toDouble() - 273.15).toInt().toString().plus("°C")
+                    sunrise.text = SimpleDateFormat("HH.mm").format( posts.getSys().sunrise.toLong() * 1000L )
+                    sunset.text = SimpleDateFormat("HH.mm").format( posts.getSys().sunset.toLong() * 1000L )
+                    pressure.text = posts.getMain().pressure
+
                     var iconUrl = "https://openweathermap.org/img/w/".plus(posts.getWeather()[0].icon.plus(".png"))
                     Log.d("start", iconUrl)
                     Glide.with(this@MainActivity)
