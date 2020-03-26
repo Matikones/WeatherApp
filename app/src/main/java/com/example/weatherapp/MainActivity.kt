@@ -24,14 +24,12 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        Log.d("start", "Start")
         APIConnect()
 
         button.setOnClickListener {
-            Log.d("start", city)
             if(city == editText.text.toString())
             {
-                Toast.makeText(this, "City is already showing", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "You didn't change text!", Toast.LENGTH_LONG).show()
             }else{
                 city = editText.text.toString()
                 APIConnect()
@@ -51,9 +49,8 @@ class MainActivity : AppCompatActivity() {
         call.enqueue(object : Callback<Post> {
 
                 override fun onResponse(call: Call<Post>, response: Response<Post>) {
-                    Log.d("start", "3")
                     if (!response.isSuccessful) {
-                        Log.d("!response", "Brak odpowiedzi")
+                        Toast.makeText(this@MainActivity, "City not exist or network error", Toast.LENGTH_LONG).show()
                         return
                     }
                     val posts = response.body()!!
@@ -77,8 +74,10 @@ class MainActivity : AppCompatActivity() {
                 override fun onFailure(
                     call: Call<Post>,
                     t: Throwable
-                ) { Log.i("start", "5:", t)}
+                ) {
+                    Log.i("start", "Failure", t)
+                    Toast.makeText(this@MainActivity, "Error", Toast.LENGTH_LONG).show()
+                }
             })
-        Log.d("start", "6")
     }
 }
